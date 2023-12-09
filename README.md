@@ -1,4 +1,16 @@
-# Flex-Tool
-Energy Management Simulator Description This project is an energy management simulator developed in Python, using Streamlit to create an interactive user interface. The simulator allows users to model and analyze various aspects of energy management, including total energy demand, wind and thermal power generation, and energy import. Users can manipulate various parameters such as flexibility factor, flexibility range, and slope to observe how these affect the final price of energy flexibility.
+# Flex Price per Hour Calculator
+This web application is an intuitive and advanced tool designed to provide detailed energy cost analyses, catering to users with varying levels of experience in the energy sector and data management.
+Key Features:
+User-Friendly Interface: The application features a clear and well-organized interface, making it easy to input data and understand results. Users can effortlessly enter information about energy production and consumption, as well as associated costs.
 
-Customizable Input Features: Users can enter specific values for various parameters such as total energy demand, wind and thermal production, and energy prices. Dynamic Calculation: The simulator dynamically calculates the price of energy flexibility based on the inputs provided. Visualization of Results: Calculation results are clearly displayed, enabling users to understand the impact of their choices. Intuitive User Interface: Thanks to Streamlit, the application has a clean and easy-to-use user interface.
+Simplified Complex Calculations:
+Behind the simplicity of the interface, the application performs complex calculations to determine the "Flexibility Price." This value is crucial for understanding how to optimize energy usage based on fluctuations in demand and supply.
+
+Data Visualization:
+The application uses intuitive graphs to show how energy costs vary. These graphs are an excellent tool for visualizing trends and patterns, making complex data more accessible and understandable.
+
+Versatile Tool for Various Needs:
+Whether you are an energy sector professional or simply interested in better understanding the dynamics of energy costs, this application offers significant added value.
+
+Decision Support:
+By providing detailed and customizable analyses, the application helps users make informed decisions regarding energy management and optimization.
