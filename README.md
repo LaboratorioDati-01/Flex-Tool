@@ -1,5 +1,6 @@
 # Flex Price per Hour Calculator
 This web application is an intuitive and advanced tool designed to provide detailed energy cost analyses, catering to users with varying levels of experience in the energy sector and data management.
+
 Key Features:
 User-Friendly Interface: The application features a clear and well-organized interface, making it easy to input data and understand results. Users can effortlessly enter information about energy production and consumption, as well as associated costs.
 
