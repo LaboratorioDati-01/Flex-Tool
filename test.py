@@ -4,6 +4,7 @@ import random
 import math
 import matplotlib.pyplot as plt
 import numpy as np
+import streamlit.components.v1 as components
 # from scipy.optimize import curve_fit
 # Setting a fixed seed for reproducibility of random operations
 random.seed(42)  # Usare un seed fisso è una buona pratica per risultati riproducibili
@@ -113,7 +114,6 @@ def main():
     ABS_Delta_Fe = []
     Ie = []
     C1e = []
-    # Creazione dei widget per l'input dell'utente
     ToT_Demand = st.number_input("Total Demand of Energy (MW)", value=4700)
     Wind = st.number_input("Wind Energy Production (MW)", value=1700)
     Import = st.number_input("Imported Energy Quantity (MW)", value=3000)
@@ -128,7 +128,7 @@ def main():
     flex = st.slider("Flexibility Factor 0%-10% (from 0.01 to 0.1)", 0.01, 0.1, 0.01)
     Band = st.number_input("Flexibility Range (BAND)", value=10)
     Slope = st.number_input("Slope (SLOPE)", value=50)
-
+    k_formula = st.slider("K Factor for Linear Curver of Demand", 0, 9, 0)
 
     # Creating widgets for user input
     flex_percentuale = flex * 100
@@ -149,7 +149,6 @@ def main():
     # Example corresponding values of 'Price Flex' for different bands
     price_flex_values_BAND10 = [613.62, 353.48, 267.91, 225.46, 200.32, 183.94, 172.55, 164.17, 157.81, 153.08] 
     price_flex_values_BAND50 = [455.47, 273.37, 213.67, 184.16, 166.74, 155.45, 147.69, 142.02, 137.79, 134.71]
-    
     # Creating a numeric index for the x-axis
     x_values = list(range(1000))
     # Check if all lists have at least 1000 items
@@ -165,34 +164,29 @@ def main():
         Tot_Production.append(Tot_Production2)
         Tot_Demand2_calc = math.ceil(C1e[i]+C2)
         Tot_Demand2.append(Tot_Demand2_calc)
-    
-    # Dati forniti
+
     a = 1073
     b = -107.1
     c = 259.1
     d = -5.558
     A = DRe2_media
     B = -6.499531908721845
-    
-    # Definizione delle funzioni f(x) e g(x)
     def f(x):
         return a * np.exp(b * x) + c * np.exp(d * x)
     
     def g(x):
         return A * np.exp(B * x)
     
-    # Valori di x per il plot
     flex_values1 = np.linspace(0.00, 0.1, 100)
-    # Calcolo dei valori di y per f(x) e g(x)
     f_values = f(flex_values1)
     g_values = g(flex_values1)
 # Graph 1: Price Flex Comparison
     plt.figure(figsize=(10, 6))  # Increase the size of the graph
-    plt.plot(flex_values, price_flex_values_BAND10, marker='o', linestyle='-', markersize=7, markerfacecolor='none', markeredgecolor='blue', label='BAND10')
-    plt.plot(flex_values, price_flex_values_BAND50, marker='o', linestyle='-', markersize=7, markerfacecolor='none', markeredgecolor='orange', label='BAND50')
+    plt.plot(flex_values, price_flex_values_BAND10, marker='o', linestyle='-', markersize=7, markerfacecolor='none', markeredgecolor='blue', label='$BAND10$')
+    plt.plot(flex_values, price_flex_values_BAND50, marker='o', linestyle='-', markersize=7, markerfacecolor='none', markeredgecolor='orange', label='$BAND50$')
     plt.scatter([flex], [Price_Flex], color='red', s=50) # Highlight the current flex value
-    plt.title("Price Flex Comparison")
-    plt.xlabel("Flex %")
+    plt.title("$Price$ $Flex$ $Comparison$")
+    plt.xlabel("$Flex$ $(Probability)$")
     plt.ylabel("Price Flex $/MW")
     plt.grid(True)
     plt.legend(loc='upper right')  # Modify the position of the legend
@@ -201,19 +195,6 @@ def main():
     plt.close()
     # st.markdown(f"<h3 style='color: blue;'>Cost Demand Mean: {DRe2_media} $/MW</h3>", unsafe_allow_html=True)
 # Graph 1.2: Price Offert Comparison
-    plt.figure(figsize=(10, 6))
-    plt.plot(flex_values1, f_values, label='f(x)')
-    plt.plot(flex_values1, g_values, label='g(x)', linestyle='--')
-    plt.scatter([0.06], [f(0.06)], color='red')  # Punto di tangenza
-    plt.title('Equilibrium Point')
-    plt.xlabel('Flex %')
-    plt.ylabel('Price Flex $/MW')
-    plt.legend(loc='upper right')
-    plt.grid(True)
-    st.pyplot(plt)
-    plt.close()
-    # st.markdown(f"<h3 style='color: blue;'>Cost Demand Mean: {DRe2_media} $/MW</h3>", unsafe_allow_html=True)
-# Graph 1.3: Price Offert Comparison
     c = 259.1
     d = -5.558
     # Definizione di f(x)
@@ -221,7 +202,7 @@ def main():
         return a * np.exp(b * x) + c * np.exp(d * x)
 
     x1, y1 = 0.00, 0.00
-    x2, y2 = 0.02, 353.48
+    x2, y2 = flex_values[k_formula], price_flex_values_BAND10[k_formula]
     m = (y2 - y1) / (x2 - x1)
     # Equazione della retta
     def retta(x):
@@ -231,54 +212,34 @@ def main():
     f_values = f(x_values1)
     retta_values = retta(x_values1)
     plt.figure(figsize=(10, 6))
-    plt.plot(x_values1, f_values, label='f(x)')
-    plt.plot(x_values1, retta_values, label='y(x)', linestyle='--')
+    plt.plot(x_values1, f_values, label='$f(x)$')
+    plt.plot(x_values1, retta_values, label='$y(x)$', linestyle='--')
     plt.scatter([x2], [y2], color='red')  # Punti della retta
-    plt.title('Theoretical Linear Curve of  Demand')
-    plt.xlabel('Flex %')
+        
+    # Imposta il limite massimo dell'asse y
+    y_max = 1300  # Sostituisci con il valore massimo che desideri
+    y_min = 0
+    plt.ylim(bottom=y_min, top=y_max)
+    plt.title('$Theoretical$ $Linear$ $Curve$ $of$  $Demand$')
+    plt.xlabel('$Flex$ $(Probability)$')
+    plt.ylabel('Price Flex $/MW')
+    plt.legend(loc='upper right')
+    plt.grid(True)
+    st.pyplot(plt)
+    plt.close()
+# Graph 1.3: Price Offert Comparison
+    plt.figure(figsize=(10, 6))
+    plt.plot(flex_values1, f_values, label='$f(x)$')
+    plt.plot(flex_values1, g_values, label='$A \cdot e^{B \cdot x}$', linestyle='--')
+    plt.scatter([0.06], [f(0.06)], color='red')  # Punto di tangenza
+    plt.title('$Equilibrium$ $Point$')
+    plt.xlabel('$Flex$ $(Probability)$')
     plt.ylabel('Price Flex $/MW')
     plt.legend(loc='upper right')
     plt.grid(True)
     st.pyplot(plt)
     plt.close()
     st.markdown(f"<h3 style='color: blue;'>Cost Demand Mean: {DRe2_media} $/MW</h3>", unsafe_allow_html=True)
-# Graph 1.4: Price Offert Comparison
-    # Funzione sigmoide
-    # def sigmoid(x, L, k, x0):
-    #     return L / (1 + np.exp(-k * (x - x0)))
-
-    # # Punti dati
-    # x_data = np.array([0, 0.05])
-    # y_data = np.array([0, 201])
-    
-    # # Valore massimo L (dato)
-    # L = 260
-    
-    # # Utilizzo di curve_fit per trovare i parametri ottimali k e x0
-    # params, _ = curve_fit(lambda x, k, x0: sigmoid(x, L, k, x0), x_data, y_data, p0=[1, 0])
-    
-    # # Estrazione dei parametri k e x0
-    # k, x0 = params
-    
-    # # Valori di x per il plot
-    # x_values = np.linspace(0, 0.1, 100)
-    
-    # # Calcolo dei valori di y per la sigmoide
-    # sigmoid_values = sigmoid(x_values, L, k, x0)
-    
-    # # Creazione del plot
-    # plt.figure(figsize=(10, 6))
-    # plt.plot(x_values, sigmoid_values, label='Sigmoide')
-    # plt.scatter(x_data, y_data, color='red')  # Punti dati
-    # plt.title('Plot della Sigmoide')
-    # plt.xlabel('x')
-    # plt.ylabel('y')
-    # plt.ylim(0, 270)  # Limita l'asse y per una migliore visualizzazione
-    # plt.legend()
-    # plt.grid(True)
-    # st.pyplot(plt)
-    # plt.close()
-    # st.markdown(f"<h3 style='color: blue;'>Cost Demand Mean: {DRe2_media} $/MW</h3>", unsafe_allow_html=True)
 # Graph 2: Cumulative Distribution Function Cost of Client    
     plt.figure(figsize=(10, 6))  
     # Sort the data in ascending order
@@ -288,9 +249,9 @@ def main():
     # Create the CDF plot
     plt.plot(data_sorted, cdf_values,marker='o', linestyle='-', markersize=7, markerfacecolor='none', markeredgecolor='blue')
     # Set the title and labels
-    plt.title("Cumulative Distribution Function Cost of Client")
-    plt.xlabel("Cost to the customer [$/MWh]")
-    plt.ylabel("CDF Cost of Client Value (Probability)")
+    plt.title("$Cumulative$ $Distribution$ $Function$ $Cost$ $of$ $Client$")
+    plt.xlabel("Cost to the customer $/MWh")
+    plt.ylabel("$CDF$ $Cost$ $of$ $Client$ $Value$ $(Probability)$")
     plt.grid(True)
     st.pyplot(plt)
     plt.close()
@@ -301,16 +262,16 @@ def main():
     num_samples_less_than_mean = np.sum(DRe2_array < DRe2_media)
     num_samples_greater_than_mean = np.sum(DRe2_array >= DRe2_media)
     total_samples = len(DRe2_array)  
-    categories = ['Lower than Average', 'Higher than Average']
+    categories = ['$Lower$ $than$ $Average$', '$Higher$ $than$ $Average$']
     counts = [num_samples_less_than_mean, num_samples_greater_than_mean]
     fractions = [count / total_samples for count in counts]
     plt.figure(figsize=(10, 6))
     plt.bar(categories, fractions)
     for i, fraction in enumerate(fractions):
-        plt.text(i, fraction, f'{counts[i]}/{total_samples}', ha='center', va='bottom')
-    plt.title('Distribution of Cost Demand Mean')
-    plt.xlabel('Cost to the customer > Cost Demand Mean')
-    plt.ylabel('Fraction of Samples(Probability)')  
+        plt.text(i, fraction, f'${counts[i]}/{total_samples}$', ha='center', va='bottom')
+    plt.title('$Distribution$ $of$ $Cost$ $Demand$ $Mean$')
+    plt.xlabel('$Cost$ $to$ $the$ $customer$ > $Cost$ $Demand$ $Mean$')
+    plt.ylabel('$Fraction$ $of$ $Samples$$(Probability)$')  
     plt.grid(True)
     st.pyplot(plt)
     plt.close()
@@ -327,9 +288,9 @@ def main():
     # Create the CDF plot
     plt.plot(data_sorted, cdf_values,marker='o', linestyle='-', markersize=7, markerfacecolor='none', markeredgecolor='orange')
     # Set the title and labels
-    plt.title("Cumulative Distribution Function Balance")
-    plt.xlabel("MWh")
-    plt.ylabel("CDF Balance Value (Probability)")
+    plt.title("$Cumulative$ $Distribution$ $Function$ $Balance$")
+    plt.xlabel("$MWh$")
+    plt.ylabel("$CDF$ $Balance$ $Value$ $(Probability)$")
     plt.grid(True)
     st.pyplot(plt)
     plt.close()
@@ -338,16 +299,16 @@ def main():
     num_samples_greater_than_zero = np.sum(Balance_array > 0)
     num_samples_equal_to_zero = np.sum(Balance_array == 0)
     total_samples = len(Balance_array)
-    categories = ['Equal to Zero','Higher than Zero']
+    categories = ['$Balance$','$Unbalanced$']
     counts = [num_samples_equal_to_zero, num_samples_greater_than_zero]
     fractions = [count / total_samples for count in counts]
     plt.figure(figsize=(10, 6))
     plt.bar(categories, fractions, color='orange')
     for i, fraction in enumerate(fractions):
-        plt.text(i, fraction, f'{counts[i]}/{total_samples}', ha='center', va='bottom')
-    plt.title('Distribution of Balance Values')
-    plt.xlabel('Balance Categories')
-    plt.ylabel('Fraction of Samples')
+        plt.text(i, fraction, f'${counts[i]}/{total_samples}$', ha='center', va='bottom')
+    plt.title('$Distribution$ $of$ $Balance$ $Values$')
+    plt.xlabel('$Balance$ $Categories$')
+    plt.ylabel('$Fraction$ $of$ $Samples$$(Probability)$')
     plt.grid(True)
     st.pyplot(plt)
     plt.close()
