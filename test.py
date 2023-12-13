@@ -229,7 +229,7 @@ def main():
 # Graph 1.3: Price Offert Comparison
     plt.figure(figsize=(10, 6))
     plt.plot(flex_values1, f_values, label='$f(x)$')
-    plt.plot(flex_values1, g_values, label='$A \cdot e^{B \cdot x}$', linestyle='--')
+    plt.plot(flex_values1, g_values, label='$A e^{B \cdot x}$', linestyle='--')
     plt.scatter([0.06], [f(0.06)], color='red')  # Punto di tangenza
     plt.title('$Equilibrium$ $Point$')
     plt.xlabel('$Flex$ $(Probability)$')
@@ -270,7 +270,7 @@ def main():
         plt.text(i, fraction, f'${counts[i]}/{total_samples}$', ha='center', va='bottom')
     plt.title('$Distribution$ $of$ $Cost$ $Demand$ $Mean$')
     plt.xlabel('$Cost$ $to$ $the$ $customer$ > $Cost$ $Demand$ $Mean$')
-    plt.ylabel('$Fraction$ $of$ $Samples$$(Probability)$')  
+    plt.ylabel('$Fraction$ $of$ $Samples$ $(Probability)$')  
     plt.grid(True)
     st.pyplot(plt)
     plt.close()
@@ -307,7 +307,7 @@ def main():
         plt.text(i, fraction, f'${counts[i]}/{total_samples}$', ha='center', va='bottom')
     plt.title('$Distribution$ $of$ $Balance$ $Values$')
     plt.xlabel('$Balance$ $Categories$')
-    plt.ylabel('$Fraction$ $of$ $Samples$$(Probability)$')
+    plt.ylabel('$Fraction$ $of$ $Samples$ $(Probability)$')
     plt.grid(True)
     st.pyplot(plt)
     plt.close()
