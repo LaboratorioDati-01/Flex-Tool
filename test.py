@@ -124,7 +124,7 @@ def main():
     Price_Import = st.number_input("Imported Energy Price ($)", value=40)
     Price_Wind = st.number_input("Wind Energy Price ($)", value=20)
     Price_Thermal = st.number_input("Thermal Energy Price ($)", value=120)
-    flex = st.slider("Flexibility Factor 0%-10% (from 0.01 to 0.1)", 0.01, 0.1, 0.01)
+    flex = st.slider("Flexibility Factor 1%-10% (from 0.01 to 0.1)", 0.01, 0.1, 0.01)
     Band = st.number_input("Flexibility Range (BAND)", value=10)
     Slope = st.number_input("Slope (SLOPE)", value=50)
     k_formula = st.slider("K Factor for Linear Curver of Demand", 0, 9, 0)
