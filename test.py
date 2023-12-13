@@ -4,7 +4,6 @@ import random
 import math
 import matplotlib.pyplot as plt
 import numpy as np
-import streamlit.components.v1 as components
 # from scipy.optimize import curve_fit
 # Setting a fixed seed for reproducibility of random operations
 random.seed(42)  # Usare un seed fisso è una buona pratica per risultati riproducibili
@@ -107,7 +106,7 @@ def calcola_price_flex(ToT_Demand, Wind, Import, Max_Import, Min_Import, Thermal
 
 # Streamlit User Interface
 def main():
-    st.title("Flex price per hour calculator")
+    st.markdown("<h1 style='color: green;'>Flex price per hour calculator</h1>", unsafe_allow_html=True)
     Price_Flex = 0
     We = []
     Te = []
